@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">FinanceApp</string>
+    <string name="add_record">Добавить запись</string>
+    <string name="statistics">Статистика</string>
+    <string name="export_json">Экспортировать в JSON</string>
+    <string name="total_sum">Общая сумма</string>
+    <string name="average_expense">Средний расход</string>
+</resources>
