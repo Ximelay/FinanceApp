@@ -14,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         Button addButton = findViewById(R.id.add_button);
         Button statsButton = findViewById(R.id.stats_button);
         Button exportButton = findViewById(R.id.export_button);
+        Button emailButton = findViewById(R.id.email_button); // Новая кнопка
         ListView recordsListView = findViewById(R.id.records_list);
 
         financeAdapter = new FinanceAdapter(this, financeRecords);
@@ -57,8 +59,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
         exportButton.setOnClickListener(v -> {
-            JSONExporter.exportToJSON(this, financeRecords);
-            Toast.makeText(this, "Экспорт выполнен", Toast.LENGTH_SHORT).show();
+            File jsonFile = JSONExporter.exportToJSON(this, financeRecords); // Получаем объект File
+            if (jsonFile != null) {
+                Toast.makeText(this, "Экспорт выполнен: " + jsonFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Ошибка экспорта данных!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        emailButton.setOnClickListener(v -> {
+            File jsonFile = JSONExporter.exportToJSON(this, financeRecords); // Получаем объект File
+            if (jsonFile != null) {
+                EmailSender.sendEmailWithAttachment(this, jsonFile); // Отправляем JSON через Email
+            } else {
+                Toast.makeText(this, "Ошибка экспорта данных!", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }
