@@ -12,8 +12,9 @@ import java.util.List;
 
 public class JSONExporter {
 
-    public static void exportToJSON(Context context, List<FinanceRecord> records) {
+    public static File exportToJSON(Context context, List<FinanceRecord> records) {
         try {
+            // Преобразование записей в JSON
             JSONArray jsonArray = new JSONArray();
             for (FinanceRecord record : records) {
                 JSONObject jsonObject = new JSONObject();
@@ -22,14 +23,18 @@ public class JSONExporter {
                 jsonArray.put(jsonObject);
             }
 
+            // Сохранение JSON в файл
             File file = new File(context.getExternalFilesDir(null), "finance.json");
             try (FileWriter writer = new FileWriter(file)) {
-                writer.write(jsonArray.toString(4));
+                writer.write(jsonArray.toString(4)); // 4 - отступы для форматирования
             }
 
             Log.d("JSONExporter", "Файл сохранен: " + file.getAbsolutePath());
+            return file; // Возвращаем объект File
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e("JSONExporter", "Ошибка при экспорте в JSON", e);
+            return null; // Возвращаем null в случае ошибки
         }
     }
 }
